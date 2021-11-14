@@ -22,7 +22,7 @@ def test_user_code():
         if result[:15] == "open-input-file":
             result = "Couldn't find \"" + filename + "\" in your .zip submission."
         return result
-(call-with-output-file "out.txt" (lambda (out) (write (individual-test suite-index test-index) out)))
+
 # Call a specific test, writing the output to out.txt to avoid user print statements interfering
 def run_test(suite_index, test_index):
     start = datetime.now()
