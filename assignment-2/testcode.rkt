@@ -14,8 +14,3 @@
   (add-me)
   (sub-me)
 ))
-
-(define run-all (make-run-all test))
-(define r run-all)
-(define individual-test (make-individual-test test))
-(define get-weights (make-get-weights test))
