@@ -9,18 +9,23 @@ file_name = sys.argv[2]
 repo_name = sys.argv[3]
 
 # Runs at the very start of a student's submission. Parses through their submission to make
-# sure it's well-formed, but doesn't call any tests.
+# sure it's well-formed, but doesn't call any tests. Then does the same thing to the test code,
+# this time to make sure there are no duplicated imports (malicous attempt to overwrite tests)
 def test_user_code():
     try:
         result = subprocess.run(["racket", f'{repo_name}/{assignment_name}/{file_name}'], capture_output=True, timeout=timeout)
     except subprocess.TimeoutExpired:
         return "Timed out while parsing your code."
     if result.returncode == 0:
-        return None
+        result = subprocess.run(["racket", f'{repo_name}/{assignment_name}/{file_name}'], capture_output=True, timeout=timeout)
+        if result.returncode == 0:
+            return None
+        else:
+            return result.stderr.decode()[:-1]
     else:
         result = result.stderr.decode()[:-1]
         if result[:15] == "open-input-file":
-            result = "Couldn't find \"" + file_name + "\" in your .zip submission."
+            result = "Couldn't find \"" + file_name + "\" in your submission. Either submit only one file, or make sure one of the files (either in a .zip or not) is named \"" + file_name + "\"."
         return result
 
 # Call a specific test, writing the output to out.txt to avoid user print statements interfering
