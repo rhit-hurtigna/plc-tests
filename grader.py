@@ -6,12 +6,13 @@ from datetime import datetime
 timeout = 2
 assignment_name = sys.argv[1]
 file_name = sys.argv[2]
+repo_name = sys.argv[3]
 
 # Runs at the very start of a student's submission. Parses through their submission to make
 # sure it's well-formed, but doesn't call any tests.
 def test_user_code():
     try:
-        result = subprocess.run(["racket", f'{assignment_name}/{file_name}'], capture_output=True, timeout=timeout)
+        result = subprocess.run(["racket", f'{repo_name}/{assignment_name}/{file_name}'], capture_output=True, timeout=timeout)
     except subprocess.TimeoutExpired:
         return "Timed out while parsing your code."
     if result.returncode == 0:
@@ -26,7 +27,7 @@ def test_user_code():
 def run_test(suite_index, test_index):
     start = datetime.now()
     try:
-        result = subprocess.run(["racket", "-l", "racket", "-t", f'{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (individual-test {suite_index} {test_index}) out)))'], capture_output=True, timeout=timeout)
+        result = subprocess.run(["racket", "-l", "racket", "-t", f'{repo_name}/{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (individual-test {suite_index} {test_index}) out)))'], capture_output=True, timeout=timeout)
     except subprocess.TimeoutExpired:
         return (False, "Timed out while excuting this case.", timeout)
     time = (datetime.now() - start).total_seconds()
@@ -45,7 +46,7 @@ def read_output():
 # We need to know the weights beforehand so if the tests crash, we know how many points to deduct.
 def get_weights():
     weights_array = []
-    subprocess.run(["racket", "-l", "racket", "-t", f'{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (get-weights) out)))'], capture_output=True)
+    subprocess.run(["racket", "-l", "racket", "-t", f'{repo_name}/{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (get-weights) out)))'], capture_output=True)
     for scheme_list in parse_scheme_list(read_output()):
         weights_array.append(parse_scheme_list(scheme_list))
     return weights_array
