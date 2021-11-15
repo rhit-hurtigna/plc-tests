@@ -34,7 +34,7 @@ def run_test(suite_index, test_index):
     try:
         result = subprocess.run(["racket", "-l", "racket", "-t", f'{repo_name}/{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (individual-test {suite_index} {test_index} test) out)) #:exists \'replace)'], capture_output=True, timeout=timeout)
     except subprocess.TimeoutExpired:
-        return (False, "Timed out while excuting this case.", timeout)
+        return (False, "Timed out while executing this case.", timeout)
     time = (datetime.now() - start).total_seconds()
     if result.returncode == 0:
         return (True, read_output(), time)
