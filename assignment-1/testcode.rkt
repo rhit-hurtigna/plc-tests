@@ -1,7 +1,7 @@
 #lang racket
 
-(require "assignment-1.rkt")
 (require "../testcode-base.rkt")
+(require "assignment-1.rkt")
 (provide get-weights individual-test test)
 
 (define test
