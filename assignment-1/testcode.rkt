@@ -2,6 +2,7 @@
 
 (require "../testcode-base.rkt")
 (require "assignment-1.rkt")
+(provide get-weights individual-test)
 
 (define test
   (make-test
