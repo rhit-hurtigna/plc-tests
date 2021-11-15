@@ -27,7 +27,7 @@ def test_user_code():
 def run_test(suite_index, test_index):
     start = datetime.now()
     try:
-        result = subprocess.run(["racket", "-l", "racket", "-t", f'{repo_name}/{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (individual-test {suite_index} {test_index}) out)) #:exists \'replace)'], capture_output=True, timeout=timeout)
+        result = subprocess.run(["racket", "-l", "racket", "-t", f'{repo_name}/{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (individual-test {suite_index} {test_index} test) out)) #:exists \'replace)'], capture_output=True, timeout=timeout)
     except subprocess.TimeoutExpired:
         return (False, "Timed out while excuting this case.", timeout)
     time = (datetime.now() - start).total_seconds()
@@ -46,7 +46,7 @@ def read_output():
 # We need to know the weights beforehand so if the tests crash, we know how many points to deduct.
 def get_weights():
     weights_array = []
-    subprocess.run(["racket", "-l", "racket", "-t", f'{repo_name}/{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (get-weights) out)) #:exists \'replace)'], capture_output=True)
+    subprocess.run(["racket", "-l", "racket", "-t", f'{repo_name}/{assignment_name}/testcode.rkt', "-e", f'(call-with-output-file "out.txt" (lambda (out) (write (get-weights test) out)) #:exists \'replace)'], capture_output=True)
     for scheme_list in parse_scheme_list(read_output()):
         weights_array.append(parse_scheme_list(scheme_list))
     return weights_array
