@@ -17,7 +17,7 @@ def test_user_code():
     except subprocess.TimeoutExpired:
         return "Timed out while parsing your code."
     if result.returncode == 0:
-        result = subprocess.run(["racket", f'{repo_name}/{assignment_name}/{file_name}'], capture_output=True, timeout=timeout)
+        result = subprocess.run(["racket", f'{repo_name}/{assignment_name}/testcode.rkt'], capture_output=True, timeout=timeout)
         if result.returncode == 0:
             return None
         else:
