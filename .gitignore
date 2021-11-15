@@ -1,5 +1,3 @@
-*/*
-!*/testcode.rkt
 *.bak
 *.dep
 *.zo
