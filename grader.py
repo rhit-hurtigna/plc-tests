@@ -121,7 +121,6 @@ else:
         "tests": tests
     }
 
-print(answer)
-# results_file = open("/autograder/results/results.json", "w+")
-# json.dump(answer, results_file)
-# results_file.close()
+results_file = open("/autograder/results/results.json", "w+")
+json.dump(answer, results_file)
+results_file.close()
