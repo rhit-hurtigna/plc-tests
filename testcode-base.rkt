@@ -65,26 +65,24 @@
 
 (define suite-separator "----------\n")
 
-(define-syntax individual-test
-  (syntax-rules ()
-    ([individual-test suite-index test-index]
+(define individual-test
+  (lambda (suite-index test-index test)
      [let ([suite-name (list-ref (car test) suite-index)] [suite (list-ref (cdr test) suite-index)])
        (let ([testcase (list-ref suite test-index)])
          (let ([student-answer ((car testcase))] [equivalent? (cadr testcase)] [expected (caddr testcase)] [test-weight (cadddr testcase)] [code (car (cddddr testcase))])
            (let ([score (if [equivalent? student-answer expected] test-weight 0)])
-             (list score code student-answer expected))))])))
+             (list score code student-answer expected))))]))
 
-(define-syntax get-weights
-  (syntax-rules ()
-    ([_]
-     [let loop ([suites-ptr (cdr test)])
-       (if [null? suites-ptr]
-           (list)
-           (let ([suite (car suites-ptr)] [other (cdr suites-ptr)])
-             (cons
-              (let inner-loop ([tests-ptr suite])
-                (if [null? tests-ptr]
-                    (list)
-                    (let ([test (car tests-ptr)] [other-tests (cdr tests-ptr)])
-                      (cons (caddr test) (inner-loop other-tests)))))
-              (loop other))))])))
+(define get-weights
+  (lambda (test)
+    [let loop ([suites-ptr (cdr test)])
+      (if [null? suites-ptr]
+          (list)
+          (let ([suite (car suites-ptr)] [other (cdr suites-ptr)])
+            (cons
+             (let inner-loop ([tests-ptr suite])
+               (if [null? tests-ptr]
+                   (list)
+                   (let ([test (car tests-ptr)] [other-tests (cdr tests-ptr)])
+                     (cons (cadddr test) (inner-loop other-tests)))))
+             (loop other))))]))
